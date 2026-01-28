@@ -21,14 +21,17 @@ function PlayerInput({ player, index, onNameChange, onColorChange }) {
         placeholder="Enter player name"
         value={player.name}
         onChange={(e) => onNameChange(index, e.target.value)}
+        aria-label={`Player ${index + 1} name`}
       />
       <div className="color-selector">
-        <label>Color:</label>
+        <label htmlFor={`color-select-${index}`}>Color:</label>
         <select
+          id={`color-select-${index}`}
           className="color-select"
           value={player.color}
           onChange={(e) => onColorChange(index, e.target.value)}
           style={{ backgroundColor: player.color }}
+          aria-label={`Player ${index + 1} color`}
         >
           <option value="">Select color</option>
           {colors.map(color => (
@@ -44,6 +47,7 @@ function PlayerInput({ player, index, onNameChange, onColorChange }) {
         <div 
           className="color-preview" 
           style={{ backgroundColor: player.color || '#ddd' }}
+          aria-hidden="true"
         />
       </div>
     </div>

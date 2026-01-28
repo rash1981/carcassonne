@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PlayerInput from './PlayerInput';
 import './PlayerInputScreen.css';
 
-function PlayerInputScreen({ onNext }) {
+function PlayerInputScreen() {
   const [players, setPlayers] = useState([
     { name: '', color: '' }
   ]);
