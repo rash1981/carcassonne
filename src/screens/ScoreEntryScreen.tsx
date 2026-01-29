@@ -3,6 +3,7 @@ import { Button, Space, Typography, Card, Modal } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import type { Player, GameResult } from '../types';
 import { saveGameResult } from '../utils/storage';
+import BluetoothSyncButton from '../components/BluetoothSyncButton';
 
 const { Title } = Typography;
 
@@ -75,7 +76,10 @@ const ScoreEntryScreen: React.FC<ScoreEntryScreenProps> = ({ initialPlayers, onE
       maxWidth: '600px',
       margin: '0 auto'
     }}>
-      <Title level={2}>Score Tracker</Title>
+      <Space align="center" style={{ width: '100%', justifyContent: 'center' }}>
+        <Title level={2}>Score Tracker</Title>
+        <BluetoothSyncButton />
+      </Space>
       
       <Space direction="vertical" size="middle" style={{ width: '100%', marginTop: '20px' }}>
         {players.map((player, index) => (

@@ -16,6 +16,11 @@ A React app to quickly and easily input scores while playing the Carcassonne til
 - **Game History**: Automatically saves game results to browser storage
 - **Leaderboard**: View player rankings based on number of wins
 - **Tie Handling**: Properly handles and displays tie scenarios
+- **Multi-Device Sync**: Synchronize game data across multiple devices without internet
+  - **QR Code Sync**: Works on ALL devices (iOS, Android) and browsers (Safari, Firefox, Chrome)
+  - **Bluetooth Sync**: Available on Chrome/Edge browsers for faster wireless sync (Not on iOS)
+  - **Automatic Conflict Resolution**: Merges game data without duplicates
+  - See [Browser Compatibility Guide](BROWSER_COMPATIBILITY.md) for detailed platform support
 
 ## Technology Stack
 
@@ -94,3 +99,43 @@ npm run lint
 4. Use +/- buttons to adjust player scores during the game
 5. Click "End Game" to see the winner and save results
 6. View the "Leaderboard" to see player rankings by wins
+
+### Multi-Device Synchronization
+
+Sync game data across multiple devices without an internet connection:
+
+#### QR Code Sync (Recommended for iOS/Safari)
+1. On **Device A**: Click the "Sync" button and select "Show QR Code"
+2. On **Device B**: Click the "Sync" button and select "Scan QR Code"
+3. Point Device B's camera at the QR code on Device A
+4. Game data is automatically imported and merged
+
+**Works on:** All devices and browsers including iOS Safari, Firefox, Chrome, Edge
+
+#### Bluetooth Sync (Chrome/Edge only)
+1. Ensure both devices have Bluetooth enabled
+2. On both devices, open the app and click "Sync"
+3. On **Device A**: Click "Connect to Device" and select Device B
+4. Click "Sync Data" to exchange game history
+5. Games are automatically merged without duplicates
+
+**Works on:** Chrome and Edge browsers on Android and Desktop only
+**Note:** NOT supported on ANY iOS browsers (including Chrome), Safari on macOS, or Firefox
+
+**Important:** Due to Apple's App Store restrictions, ALL browsers on iOS (including Chrome, Firefox, etc.) use the same WebKit engine as Safari, which does not support Web Bluetooth. If you're on iOS, please use QR Code sync instead.
+
+#### Browser Compatibility
+
+| Feature | Chrome (Android/Desktop) | Chrome (iOS) | Edge (Desktop) | Safari (iOS/macOS) | Firefox |
+|---------|-------------------------|--------------|----------------|-------------------|---------|
+| QR Code Sync | ✅ Full Support | ✅ Full Support | ✅ Full Support | ✅ Full Support | ✅ Full Support |
+| Bluetooth Sync | ✅ Full Support | ❌ Not Supported | ✅ Full Support | ❌ Not Supported | ❌ Not Supported |
+
+**Important Note:** Web Bluetooth is NOT available on iOS for ANY browser (Chrome, Safari, Firefox, etc.) due to Apple's platform restrictions. All iOS browsers must use WebKit, which doesn't support the Web Bluetooth API. iOS users should use QR Code sync.
+
+### Data Privacy
+
+- All game data is stored locally on your device
+- Bluetooth and QR code sync only transfers data directly between your devices
+- No data is sent to any servers or third parties
+- You have full control over when and with whom you share your data

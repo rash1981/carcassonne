@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Space, Typography } from 'antd';
 import { TrophyOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import BluetoothSyncButton from '../components/BluetoothSyncButton';
 
 const { Title } = Typography;
 
@@ -38,6 +39,9 @@ const StartScreen: React.FC<StartScreenProps> = ({ onNewGame, onLeaderboard }) =
         >
           Leaderboard
         </Button>
+        <div style={{ textAlign: 'center' }}>
+          <BluetoothSyncButton />
+        </div>
       </Space>
     </div>
   );

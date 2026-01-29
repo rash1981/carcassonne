@@ -1,9 +1,10 @@
-import React from 'react';
-import { Button, Table, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Button, Table, Typography, Space } from 'antd';
 import { TrophyOutlined } from '@ant-design/icons';
 import { getLeaderboard } from '../utils/storage';
 import type { ColumnsType } from 'antd/es/table';
 import type { LeaderboardEntry } from '../types';
+import BluetoothSyncButton from '../components/BluetoothSyncButton';
 
 const { Title } = Typography;
 
@@ -12,7 +13,12 @@ interface LeaderboardScreenProps {
 }
 
 const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({ onBack }) => {
-  const leaderboard = getLeaderboard();
+  const [leaderboard, setLeaderboard] = useState(getLeaderboard());
+
+  const handleSyncComplete = () => {
+    // Refresh leaderboard after sync
+    setLeaderboard(getLeaderboard());
+  };
 
   const columns: ColumnsType<LeaderboardEntry> = [
     {
@@ -75,13 +81,15 @@ const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({ onBack }) => {
         locale={{ emptyText: 'No games played yet. Start a new game to see the leaderboard!' }}
       />
 
-      <Button
-        type="primary"
-        onClick={onBack}
-        style={{ marginTop: '20px' }}
-      >
-        Back to Start
-      </Button>
+      <Space style={{ marginTop: '20px' }}>
+        <Button
+          type="primary"
+          onClick={onBack}
+        >
+          Back to Start
+        </Button>
+        <BluetoothSyncButton onSyncComplete={handleSyncComplete} />
+      </Space>
     </div>
   );
 };
