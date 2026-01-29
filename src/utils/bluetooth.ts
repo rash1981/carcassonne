@@ -4,8 +4,13 @@
  * IMPORTANT BROWSER COMPATIBILITY NOTES:
  * - Chrome/Chromium (Desktop & Android): Full support ✓
  * - Edge (Desktop): Full support ✓
- * - Safari (iOS & macOS): NOT SUPPORTED ✗
- * - Firefox: Limited/No support ✗
+ * - Chrome/Firefox/Safari (iOS): NOT SUPPORTED ✗ (All iOS browsers use WebKit)
+ * - Safari (macOS): NOT SUPPORTED ✗
+ * - Firefox (Desktop): Limited/No support ✗
+ * 
+ * CRITICAL: iOS does not support Web Bluetooth in ANY browser due to Apple's
+ * App Store requirement that all browsers use WebKit. This includes Chrome,
+ * Firefox, and any other browser on iOS.
  * 
  * This service provides device-to-device synchronization when supported.
  */
@@ -309,6 +314,24 @@ class BluetoothSyncService {
   } {
     const userAgent = navigator.userAgent.toLowerCase();
     
+    // Check if running on iOS (iPhone, iPad, iPod)
+    // ALL browsers on iOS use WebKit and have the same limitations
+    const isIOS = /iphone|ipad|ipod/.test(userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    if (isIOS) {
+      // On iOS, all browsers (including Chrome) use WebKit and don't support Web Bluetooth
+      const browserName = userAgent.includes('crios') ? 'Chrome (iOS)' : 
+                         userAgent.includes('fxios') ? 'Firefox (iOS)' : 
+                         userAgent.includes('safari') ? 'Safari (iOS)' : 
+                         'Browser (iOS)';
+      return {
+        browser: browserName,
+        isSupported: false,
+        message: 'Web Bluetooth is not supported on iOS. All iOS browsers use WebKit which lacks this feature. Please use QR Code sync instead.'
+      };
+    }
+    
     if (userAgent.includes('chrome') && !userAgent.includes('edg')) {
       return {
         browser: 'Chrome',
@@ -325,13 +348,13 @@ class BluetoothSyncService {
       return {
         browser: 'Safari',
         isSupported: false,
-        message: 'Safari does not support Web Bluetooth. Please use Chrome or Edge.'
+        message: 'Safari does not support Web Bluetooth. Please use Chrome or Edge on desktop/Android, or use QR Code sync.'
       };
     } else if (userAgent.includes('firefox')) {
       return {
         browser: 'Firefox',
         isSupported: false,
-        message: 'Firefox has limited Web Bluetooth support. Please use Chrome or Edge.'
+        message: 'Firefox has limited Web Bluetooth support. Please use Chrome or Edge on desktop/Android, or use QR Code sync.'
       };
     } else {
       return {
@@ -339,7 +362,7 @@ class BluetoothSyncService {
         isSupported: this.isSupported(),
         message: this.isSupported() 
           ? 'Web Bluetooth is supported' 
-          : 'Web Bluetooth is not supported in this browser'
+          : 'Web Bluetooth is not supported in this browser. Please use QR Code sync.'
       };
     }
   }

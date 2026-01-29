@@ -118,15 +118,19 @@ Sync game data across multiple devices without an internet connection:
 4. Click "Sync Data" to exchange game history
 5. Games are automatically merged without duplicates
 
-**Works on:** Chrome and Edge browsers on Android and Desktop
-**Note:** NOT supported on iOS Safari or Firefox
+**Works on:** Chrome and Edge browsers on Android and Desktop only
+**Note:** NOT supported on ANY iOS browsers (including Chrome), Safari on macOS, or Firefox
+
+**Important:** Due to Apple's App Store restrictions, ALL browsers on iOS (including Chrome, Firefox, etc.) use the same WebKit engine as Safari, which does not support Web Bluetooth. If you're on iOS, please use QR Code sync instead.
 
 #### Browser Compatibility
 
-| Feature | Chrome (Android/Desktop) | Edge (Desktop) | Safari (iOS/macOS) | Firefox |
-|---------|-------------------------|----------------|-------------------|---------|
-| QR Code Sync | ✅ Full Support | ✅ Full Support | ✅ Full Support | ✅ Full Support |
-| Bluetooth Sync | ✅ Full Support | ✅ Full Support | ❌ Not Supported | ❌ Not Supported |
+| Feature | Chrome (Android/Desktop) | Chrome (iOS) | Edge (Desktop) | Safari (iOS/macOS) | Firefox |
+|---------|-------------------------|--------------|----------------|-------------------|---------|
+| QR Code Sync | ✅ Full Support | ✅ Full Support | ✅ Full Support | ✅ Full Support | ✅ Full Support |
+| Bluetooth Sync | ✅ Full Support | ❌ Not Supported | ✅ Full Support | ❌ Not Supported | ❌ Not Supported |
+
+**Important Note:** Web Bluetooth is NOT available on iOS for ANY browser (Chrome, Safari, Firefox, etc.) due to Apple's platform restrictions. All iOS browsers must use WebKit, which doesn't support the Web Bluetooth API. iOS users should use QR Code sync.
 
 ### Data Privacy
 

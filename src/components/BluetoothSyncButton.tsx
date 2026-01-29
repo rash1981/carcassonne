@@ -222,8 +222,14 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
           {/* Browser Compatibility Info */}
           {!compatibility.isSupported && (
             <Alert
-              message={`${compatibility.browser} - Bluetooth Not Supported`}
-              description="Don't worry! You can still sync using QR codes below."
+              message={`${compatibility.browser} - Web Bluetooth Not Available`}
+              description={
+                <div>
+                  {compatibility.message}
+                  <br /><br />
+                  <strong>Good news:</strong> QR Code sync works on all devices and browsers!
+                </div>
+              }
               type="info"
               showIcon
               icon={<InfoCircleOutlined />}
@@ -234,7 +240,7 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
           <Card title={<><QrcodeOutlined /> QR Code Sync</>} size="small">
             <Space direction="vertical" style={{ width: '100%' }}>
               <Paragraph type="secondary" style={{ marginBottom: 10 }}>
-                Works on all devices and browsers, including iOS Safari and Firefox.
+                Universal sync method that works on ALL devices and browsers, including all iOS devices.
               </Paragraph>
               <Space wrap style={{ width: '100%', justifyContent: 'center' }}>
                 <Button
@@ -327,9 +333,9 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
             message="How to Sync"
             description={
               <ul style={{ marginBottom: 0, paddingLeft: 20 }}>
-                <li><strong>QR Code (Recommended for iOS):</strong> Generate QR code on one device, scan with another device's camera</li>
+                <li><strong>QR Code (Works Everywhere):</strong> Generate QR code on one device, scan with another device's camera. Works on ALL devices including iOS.</li>
                 {compatibility.isSupported && (
-                  <li><strong>Bluetooth:</strong> Both devices connect, then click "Sync Data" to exchange game history</li>
+                  <li><strong>Bluetooth (Android/Desktop Chrome/Edge only):</strong> Both devices connect, then click "Sync Data" to exchange game history</li>
                 )}
                 <li>Game data is automatically merged without duplicates</li>
               </ul>
