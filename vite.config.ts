@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Use relative paths for flexible deployment
+  base: process.env.GITHUB_ACTIONS ? '/carcassonne/' : './', // Use /carcassonne/ for GitHub Pages, relative paths for other deployments
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
