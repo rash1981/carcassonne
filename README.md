@@ -59,7 +59,7 @@ The build process creates a fully static application in the `dist/` folder that 
 
 The app is configured to work as a static application with:
 - **Relative paths**: All assets use relative paths for flexible deployment
-- **Client-side routing**: All navigation happens on the client side
+- **Client-side navigation**: All navigation happens on the client side using React state
 - **Local storage**: Game data persists in the browser's local storage
 - **No server required**: The app runs entirely in the browser
 
