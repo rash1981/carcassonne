@@ -71,11 +71,11 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
       bluetoothSync.removeEventListener(handleSyncEvent);
       syncManager.removeStateListener(handleStateChange);
       // Clean up QR scanner
-      if (html5QrCodeRef.current) {
+      if (html5QrCodeRef.current && isScanning) {
         html5QrCodeRef.current.stop().catch(console.error);
       }
     };
-  }, [onSyncComplete]);
+  }, [onSyncComplete, isScanning]);
 
   const handleConnect = async () => {
     try {
@@ -114,9 +114,14 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
     try {
       setIsScanning(true);
       
-      if (!html5QrCodeRef.current && !scannerInitialized.current) {
-        html5QrCodeRef.current = new Html5Qrcode("qr-reader");
+      // Only create a new scanner if one doesn't exist
+      if (!html5QrCodeRef.current) {
+        if (scannerInitialized.current) {
+          // Prevent race condition - scanner is being initialized
+          return;
+        }
         scannerInitialized.current = true;
+        html5QrCodeRef.current = new Html5Qrcode("qr-reader");
       }
 
       if (html5QrCodeRef.current) {
@@ -137,6 +142,7 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
       }
     } catch (error) {
       console.error('Failed to start QR scanner:', error);
+      scannerInitialized.current = false;
       Modal.error({
         title: 'Camera Error',
         content: 'Unable to access camera. Please ensure camera permissions are granted.',
@@ -149,11 +155,14 @@ const BluetoothSyncButton: React.FC<BluetoothSyncButtonProps> = ({ onSyncComplet
     if (html5QrCodeRef.current && isScanning) {
       try {
         await html5QrCodeRef.current.stop();
+        setIsScanning(false);
       } catch (error) {
         console.error('Error stopping scanner:', error);
+        setIsScanning(false);
       }
+    } else {
+      setIsScanning(false);
     }
-    setIsScanning(false);
   };
 
   const handleQRScanSuccess = async (decodedText: string) => {

@@ -76,11 +76,11 @@ class SyncManager {
       
       case 'dataReceived':
         if (event.data) {
-          this.mergeGameData(event.data);
+          const gamesAdded = this.mergeGameData(event.data);
           this.updateState({ 
             lastSyncTime: new Date(),
             isSyncing: false,
-            error: undefined
+            error: gamesAdded > 0 ? undefined : 'No new games to sync'
           });
         }
         break;
@@ -139,7 +139,7 @@ class SyncManager {
    * Merge received game data with local data
    * This handles conflict resolution by keeping games unique by date and players
    */
-  private mergeGameData(receivedGames: GameResult[]): void {
+  private mergeGameData(receivedGames: GameResult[]): number {
     try {
       const localGames = getGameResults();
       
@@ -161,6 +161,7 @@ class SyncManager {
       });
 
       console.log(`Sync complete: Added ${newGamesCount} new games`);
+      return newGamesCount;
     } catch (error) {
       console.error('Error merging game data:', error);
       throw error;
@@ -202,11 +203,23 @@ class SyncManager {
         };
       }
 
-      this.mergeGameData(importedGames);
+      // Validate structure of each game
+      for (const game of importedGames) {
+        if (!game.players || !Array.isArray(game.players) || 
+            !game.date || !game.winner || !Array.isArray(game.winner)) {
+          return {
+            success: false,
+            gamesAdded: 0,
+            error: 'Invalid game data structure'
+          };
+        }
+      }
+
+      const gamesAdded = this.mergeGameData(importedGames);
       
       return { 
         success: true, 
-        gamesAdded: importedGames.length 
+        gamesAdded
       };
     } catch (error) {
       return { 
