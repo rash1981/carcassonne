@@ -1,0 +1,46 @@
+import React from 'react';
+import { Button, Space, Typography } from 'antd';
+import { TrophyOutlined, PlayCircleOutlined } from '@ant-design/icons';
+
+const { Title } = Typography;
+
+interface StartScreenProps {
+  onNewGame: () => void;
+  onLeaderboard: () => void;
+}
+
+const StartScreen: React.FC<StartScreenProps> = ({ onNewGame, onLeaderboard }) => {
+  return (
+    <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      minHeight: '100vh',
+      padding: '20px'
+    }}>
+      <Title level={1}>Carcassonne Score Tracker</Title>
+      <Space direction="vertical" size="large" style={{ marginTop: '40px' }}>
+        <Button
+          type="primary"
+          size="large"
+          icon={<PlayCircleOutlined />}
+          onClick={onNewGame}
+          style={{ width: '200px', height: '50px', fontSize: '18px' }}
+        >
+          New Game
+        </Button>
+        <Button
+          size="large"
+          icon={<TrophyOutlined />}
+          onClick={onLeaderboard}
+          style={{ width: '200px', height: '50px', fontSize: '18px' }}
+        >
+          Leaderboard
+        </Button>
+      </Space>
+    </div>
+  );
+};
+
+export default StartScreen;
