@@ -39,3 +39,16 @@ export const getLeaderboard = (): LeaderboardEntry[] => {
 
   return leaderboard.sort((a, b) => b.wins - a.wins);
 };
+
+export const getPlayerNames = (): string[] => {
+  const games = getGameResults();
+  const playerNamesSet = new Set<string>();
+
+  games.forEach((game) => {
+    game.players.forEach((player) => {
+      playerNamesSet.add(player.name);
+    });
+  });
+
+  return Array.from(playerNamesSet).sort();
+};
