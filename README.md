@@ -18,8 +18,9 @@ A React app to quickly and easily input scores while playing the Carcassonne til
 - **Tie Handling**: Properly handles and displays tie scenarios
 - **Multi-Device Sync**: Synchronize game data across multiple devices without internet
   - **QR Code Sync**: Works on ALL devices (iOS, Android) and browsers (Safari, Firefox, Chrome)
-  - **Bluetooth Sync**: Available on Chrome/Edge browsers for faster wireless sync
+  - **Bluetooth Sync**: Available on Chrome/Edge browsers for faster wireless sync (Not on iOS)
   - **Automatic Conflict Resolution**: Merges game data without duplicates
+  - See [Browser Compatibility Guide](BROWSER_COMPATIBILITY.md) for detailed platform support
 
 ## Technology Stack
 
