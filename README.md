@@ -2,6 +2,8 @@
 
 A React app to quickly and easily input scores while playing the Carcassonne tile board game.
 
+🎮 **[Live Demo](https://rash1981.github.io/carcassonne/)** - Try it out on GitHub Pages!
+
 ## Features
 
 - **Start Screen**: Simple start screen with "New Game" and "Leaderboard" buttons
@@ -54,6 +56,16 @@ npm run build
 ```
 
 The build process creates a fully static application in the `dist/` folder that can be deployed to any static hosting service (GitHub Pages, Netlify, Vercel, AWS S3, etc.).
+
+#### GitHub Pages Deployment
+
+This repository is configured with GitHub Actions to automatically build and deploy to GitHub Pages:
+
+- **Automatic Deployment**: Every push to the `main` branch triggers a build and deployment
+- **Live URL**: https://rash1981.github.io/carcassonne/
+- **Manual Trigger**: You can also manually trigger deployment from the Actions tab
+
+The deployment workflow is located at `.github/workflows/deploy.yml`.
 
 #### Static Deployment
 
