@@ -70,7 +70,7 @@ The deployment workflow is located at `.github/workflows/deploy.yml`.
 #### Static Deployment
 
 The app is configured to work as a static application with:
-- **Relative paths**: All assets use relative paths for flexible deployment
+- **Flexible paths**: Uses absolute paths (`/carcassonne/`) for GitHub Pages and relative paths for other deployments
 - **Client-side navigation**: All navigation happens on the client side using React state
 - **Local storage**: Game data persists in the browser's local storage
 - **No server required**: The app runs entirely in the browser
