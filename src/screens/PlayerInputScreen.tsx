@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Input, ColorPicker, List, Space, Typography, message } from 'antd';
+import { Button, Input, List, Space, Typography, message } from 'antd';
 import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
-import type { Color } from 'antd/es/color-picker';
 import type { Player } from '../types';
 
 const { Title } = Typography;
+
+// Standard Carcassonne player colors
+const CARCASSONNE_COLORS = [
+  { name: 'Red', value: '#E74C3C' },
+  { name: 'Blue', value: '#3498DB' },
+  { name: 'Yellow', value: '#F1C40F' },
+  { name: 'Green', value: '#27AE60' },
+  { name: 'Black', value: '#2C3E50' },
+  { name: 'Gray', value: '#95A5A6' },
+];
 
 interface PlayerInputScreenProps {
   onStartGame: (players: Player[]) => void;
@@ -13,7 +22,7 @@ interface PlayerInputScreenProps {
 
 const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBack }) => {
   const [playerName, setPlayerName] = useState('');
-  const [playerColor, setPlayerColor] = useState<string>('#1677ff');
+  const [playerColor, setPlayerColor] = useState<string>(CARCASSONNE_COLORS[0].value);
   const [players, setPlayers] = useState<Player[]>([]);
 
   const handleAddPlayer = () => {
@@ -33,9 +42,13 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
       score: 0,
     };
 
-    setPlayers([...players, newPlayer]);
+    const updatedPlayers = [...players, newPlayer];
+    setPlayers(updatedPlayers);
     setPlayerName('');
-    setPlayerColor('#1677ff');
+    // Select next available color that's not already used
+    const usedColors = updatedPlayers.map(p => p.color);
+    const nextColor = CARCASSONNE_COLORS.find(c => !usedColors.includes(c.value));
+    setPlayerColor(nextColor ? nextColor.value : CARCASSONNE_COLORS[0].value);
   };
 
   const handleRemovePlayer = (index: number) => {
@@ -50,10 +63,6 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
     onStartGame(players);
   };
 
-  const handleColorChange = (color: Color) => {
-    setPlayerColor(color.toHexString());
-  };
-
   return (
     <div style={{ 
       display: 'flex', 
@@ -66,26 +75,59 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
       <Title level={2}>Add Players</Title>
       
       <Space direction="vertical" size="large" style={{ width: '100%', marginTop: '20px' }}>
-        <Space.Compact style={{ width: '100%' }}>
+        <Space direction="vertical" size="small" style={{ width: '100%' }}>
           <Input
             placeholder="Player name"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             onPressEnter={handleAddPlayer}
-            style={{ flex: 1 }}
+            style={{ width: '100%' }}
           />
-          <ColorPicker
-            value={playerColor}
-            onChange={handleColorChange}
-          />
+          <div>
+            <div style={{ marginBottom: '8px', fontSize: '14px', color: '#666' }}>
+              Select Color:
+            </div>
+            <div role="radiogroup" aria-label="Player color selection">
+              <Space wrap>
+                {CARCASSONNE_COLORS.map((color) => (
+                  <div
+                    key={color.value}
+                    role="radio"
+                    aria-checked={playerColor === color.value}
+                    aria-label={color.name}
+                    tabIndex={0}
+                    onClick={() => setPlayerColor(color.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setPlayerColor(color.value);
+                      }
+                    }}
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      backgroundColor: color.value,
+                      borderRadius: '4px',
+                      border: playerColor === color.value ? '3px solid #1890ff' : '2px solid #d9d9d9',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                      boxShadow: playerColor === color.value ? '0 0 8px rgba(24, 144, 255, 0.5)' : 'none',
+                    }}
+                    title={color.name}
+                  />
+                ))}
+              </Space>
+            </div>
+          </div>
           <Button
             type="primary"
             icon={<UserAddOutlined />}
             onClick={handleAddPlayer}
+            block
           >
-            Add
+            Add Player
           </Button>
-        </Space.Compact>
+        </Space>
 
         {players.length > 0 && (
           <List
