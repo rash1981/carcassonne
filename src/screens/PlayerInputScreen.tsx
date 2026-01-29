@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Input, List, Space, Typography, message } from 'antd';
+import { Button, AutoComplete, List, Space, Typography, message } from 'antd';
 import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
 import type { Player } from '../types';
+import { getPlayerNames } from '../utils/storage';
 
 const { Title } = Typography;
 
@@ -24,6 +25,9 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
   const [playerName, setPlayerName] = useState('');
   const [playerColor, setPlayerColor] = useState<string>(CARCASSONNE_COLORS[0].value);
   const [players, setPlayers] = useState<Player[]>([]);
+  
+  // Get autocomplete options from stored player names
+  const autocompleteOptions = getPlayerNames().map(name => ({ value: name }));
 
   const handleAddPlayer = () => {
     if (!playerName.trim()) {
@@ -76,12 +80,20 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
       
       <Space direction="vertical" size="large" style={{ width: '100%', marginTop: '20px' }}>
         <Space direction="vertical" size="small" style={{ width: '100%' }}>
-          <Input
+          <AutoComplete
             placeholder="Player name"
             value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            onPressEnter={handleAddPlayer}
+            onChange={setPlayerName}
+            options={autocompleteOptions}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleAddPlayer();
+              }
+            }}
             style={{ width: '100%' }}
+            filterOption={(inputValue, option) =>
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            }
           />
           <div>
             <div style={{ marginBottom: '8px', fontSize: '14px', color: '#666' }}>
