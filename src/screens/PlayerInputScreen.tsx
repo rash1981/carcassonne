@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button, AutoComplete, List, Space, Typography, message } from 'antd';
 import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
 import type { Player } from '../types';
@@ -26,8 +26,12 @@ const PlayerInputScreen: React.FC<PlayerInputScreenProps> = ({ onStartGame, onBa
   const [playerColor, setPlayerColor] = useState<string>(CARCASSONNE_COLORS[0].value);
   const [players, setPlayers] = useState<Player[]>([]);
   
-  // Get autocomplete options from stored player names
-  const autocompleteOptions = getPlayerNames().map(name => ({ value: name }));
+  // Get autocomplete options from stored player names, excluding already picked players
+  const autocompleteOptions = useMemo(() => {
+    return getPlayerNames()
+      .filter(name => !players.some(p => p.name.toLowerCase() === name.toLowerCase()))
+      .map(name => ({ value: name }));
+  }, [players]);
 
   const handleAddPlayer = () => {
     if (!playerName.trim()) {
