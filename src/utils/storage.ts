@@ -3,14 +3,23 @@ import type { GameResult, LeaderboardEntry } from '../types';
 const GAMES_KEY = 'carcassonne_games';
 
 export const saveGameResult = (result: GameResult): void => {
-  const games = getGameResults();
-  games.push(result);
-  localStorage.setItem(GAMES_KEY, JSON.stringify(games));
+  try {
+    const games = getGameResults();
+    games.push(result);
+    localStorage.setItem(GAMES_KEY, JSON.stringify(games));
+  } catch (error) {
+    console.error('Failed to save game result:', error);
+  }
 };
 
 export const getGameResults = (): GameResult[] => {
-  const gamesJson = localStorage.getItem(GAMES_KEY);
-  return gamesJson ? JSON.parse(gamesJson) : [];
+  try {
+    const gamesJson = localStorage.getItem(GAMES_KEY);
+    return gamesJson ? JSON.parse(gamesJson) : [];
+  } catch (error) {
+    console.error('Failed to retrieve game results:', error);
+    return [];
+  }
 };
 
 export const getLeaderboard = (): LeaderboardEntry[] => {
